@@ -15,7 +15,7 @@ const BottomNav: React.FC = () => {
 
   return (
     <div 
-      className="fixed bottom-4 left-4 right-4 h-[76px] bg-[#1A1A1A] rounded-[28px] flex justify-around items-center px-4 md:hidden z-40 select-none shadow-[0px_12px_32px_rgba(0,0,0,0.25)] border border-neutral-800/10"
+      className="fixed bottom-4 left-4 right-4 h-[76px] bg-[#1A1A1A] rounded-[28px] flex justify-around items-center px-4 md:hidden z-40 select-none shadow-[0px_12px_32px_rgba(0,0,0,0.25)] border border-neutral-800/10 print:hidden"
     >
       {navItems.map((item) => {
         const isAssignments = item.href === '/assignments';

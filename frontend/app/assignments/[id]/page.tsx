@@ -154,29 +154,21 @@ export default function AssignmentOutputPage() {
         @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         
         @media print {
-          /* Hide non-essential layout details on pdf prints */
-          body * {
-            visibility: hidden;
+          /* Explicit page setups for printing */
+          @page {
+            size: A4;
+            margin: 20mm;
           }
-          #print-paper-sheet, #print-paper-sheet * {
-            visibility: visible;
-          }
-          #print-paper-sheet {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            background: #FFFFFF !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            border: none !important;
+          body {
+            background-color: #FFFFFF !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
         }
       `}} />
 
-      {/* Main outer scrolling layout */}
-      <div className="w-full h-full overflow-hidden flex flex-col relative gap-0 select-none">
+      {/* Main outer scrolling layout (Screen view only) */}
+      <div className="w-full h-full overflow-hidden flex flex-col relative gap-0 select-none print:hidden">
         
         {/* ======================================================== */}
         {/* DESKTOP OUTPUT SCREEN LAYOUT (md and above)              */}
@@ -202,7 +194,6 @@ export default function AssignmentOutputPage() {
 
           {/* Block 2 — White Paper Card */}
           <div 
-            id="print-paper-sheet"
             className="w-full max-w-[1060px] p-8 bg-[#FFFFFF] rounded-[32px] flex flex-col gap-6 items-center shadow-2xl border border-neutral-100/50"
           >
             <PaperHeader 
@@ -216,7 +207,7 @@ export default function AssignmentOutputPage() {
             <QuestionsList sections={currentPaper.sections} />
 
             {/* Print endmark */}
-            <div className="text-[16px] font-bold text-[#303030] mt-4 select-none print:block">
+            <div className="text-[16px] font-bold text-[#303030] mt-4 select-none">
               End of Question Paper
             </div>
           </div>
@@ -270,6 +261,29 @@ export default function AssignmentOutputPage() {
           </div>
         </div>
 
+      </div>
+
+      {/* ======================================================== */}
+      {/* PRINT-ONLY QUESTION PAPER LAYOUT                         */}
+      {/* ======================================================== */}
+      <div 
+        id="print-paper-sheet"
+        className="hidden print:flex flex-col gap-6 items-center w-full bg-white text-black p-0"
+      >
+        <PaperHeader 
+          title={assignment?.title || "CBSE Assessment"}
+          subject={assignment?.subject || "Science"}
+          dueDate={formatDate(assignment?.dueDate?.toString())}
+          totalMarks={assignment?.totalMarks || 80}
+        />
+
+        {/* Questions lists */}
+        <QuestionsList sections={currentPaper.sections} />
+
+        {/* Print endmark */}
+        <div className="text-[16px] font-bold text-[#303030] mt-6 select-none text-center">
+          End of Question Paper
+        </div>
       </div>
     </MainLayout>
   );

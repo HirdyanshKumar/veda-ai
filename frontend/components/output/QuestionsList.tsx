@@ -75,7 +75,7 @@ export const QuestionsList: React.FC<QuestionsListProps> = ({ sections }) => {
       </div>
 
       {/* Answer Key Toggle Button */}
-      <div className="w-full flex justify-center py-2 select-none border-t border-neutral-100 pt-6">
+      <div className="w-full flex justify-center py-2 select-none border-t border-neutral-100 pt-6 print:hidden">
         <button
           type="button"
           onClick={() => setShowAnswers(!showAnswers)}

@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside 
-      className="absolute top-[12px] left-[12px] w-[304px] h-[756px] rounded-[32px] bg-[#FFFFFF] p-6 hidden md:flex flex-col justify-between select-none border border-neutral-100/50 shadow-[0_16px_48px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.01)]"
+      className="absolute top-[12px] left-[12px] w-[304px] h-[756px] rounded-[32px] bg-[#FFFFFF] p-6 hidden md:flex flex-col justify-between select-none border border-neutral-100/50 shadow-[0_16px_48px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.01)] print:hidden"
     >
       {/* Top Section */}
       <div className="flex flex-col w-full">

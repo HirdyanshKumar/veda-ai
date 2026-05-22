@@ -19,7 +19,7 @@ export const DifficultyBadge: React.FC<DifficultyBadgeProps> = ({ difficulty }) 
   }
 
   return (
-    <span className={`inline-block rounded px-1.5 py-0.5 text-[12px] font-semibold mr-2 select-none uppercase tracking-wide ${colors}`}>
+    <span className={`inline-block rounded px-1.5 py-0.5 text-[12px] font-semibold mr-2 select-none uppercase tracking-wide print:hidden ${colors}`}>
       [{label}]
     </span>
   );

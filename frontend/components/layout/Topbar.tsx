@@ -11,7 +11,7 @@ const Topbar: React.FC = () => {
   return (
     <header 
       className="absolute top-[16px] left-4 right-4 h-[76px] bg-white rounded-[28px] shadow-[0px_8px_30px_rgba(0,0,0,0.06)] border border-white/40 flex items-center justify-between select-none px-[18px] z-30
-                 md:absolute md:top-[12px] md:left-[327px] md:right-auto md:w-[1100px] md:h-14 md:bg-[rgba(255,255,255,0.75)] md:backdrop-blur-[12px] md:pl-6 md:pr-3 md:rounded-[16px] md:border md:border-[rgba(255,255,255,0.2)] md:shadow-sm md:px-0"
+                 md:absolute md:top-[12px] md:left-[327px] md:right-auto md:w-[1100px] md:h-14 md:bg-[rgba(255,255,255,0.75)] md:backdrop-blur-[12px] md:pl-6 md:pr-3 md:rounded-[16px] md:border md:border-[rgba(255,255,255,0.2)] md:shadow-sm md:px-0 print:hidden"
     >
       {/* ======================================================== */}
       {/* MOBILE HEADER LAYOUT (Below md)                          */}
@@ -23,15 +23,15 @@ const Topbar: React.FC = () => {
         <div className="select-none flex items-center justify-center shadow-md shadow-black/5 rounded-[10px] overflow-hidden">
           <svg width="42" height="42" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="#303030"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="white"/>
-            <path opacity="0.2" fill-rule="evenodd" clip-rule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="url(#paint0_linear_19_382)"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12.1335 19.8509C12.1335 19.8509 11.6243 21.2103 11.1576 21.2954H17.0546C18.2426 21.2954 19.3029 20.6157 19.6426 19.3411L23.0367 9.14497C23.0367 9.14497 23.3335 7.91289 23.8002 7.7005H17.8181C16.6301 7.7005 15.8666 8.12527 15.3999 9.69737L12.1335 19.8509Z" fill="white"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="white"/>
+            <path opacity="0.2" fillRule="evenodd" clipRule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="url(#paint0_linear_19_382)"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M12.1335 19.8509C12.1335 19.8509 11.6243 21.2103 11.1576 21.2954H17.0546C18.2426 21.2954 19.3029 20.6157 19.6426 19.3411L23.0367 9.14497C23.0367 9.14497 23.3335 7.91289 23.8002 7.7005H17.8181C16.6301 7.7005 15.8666 8.12527 15.3999 9.69737L12.1335 19.8509Z" fill="white"/>
             <defs>
               <linearGradient id="paint0_linear_19_382" x1="10.5424" y1="6.54428" x2="10.5424" y2="22.4936" gradientUnits="userSpaceOnUse">
-                <stop stop-color="white" stop-opacity="0"/>
-                <stop offset="0.33" stop-color="white" stop-opacity="0"/>
-                <stop offset="0.76" stop-color="#0E1513"/>
-                <stop offset="1" stop-color="#0E1513"/>
+                <stop stopColor="white" stopOpacity="0"/>
+                <stop offset="0.33" stopColor="white" stopOpacity="0"/>
+                <stop offset="0.76" stopColor="#0E1513"/>
+                <stop offset="1" stopColor="#0E1513"/>
               </linearGradient>
             </defs>
           </svg>
