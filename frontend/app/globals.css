@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom globals for modern dashboard interface */
+body {
+  color: #1A1A1A;
+  background-color: #DADADA;
+}
