@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IAssignmentDoc extends Document {
+  userId: string;
   title: string;
   subject: string;
   dueDate: Date;
@@ -73,11 +74,19 @@ const AssignmentSchema = new Schema<IAssignmentDoc>(
       type: String,
       enum: ['pending', 'processing', 'completed', 'failed'],
       default: 'pending'
+    },
+    userId: {
+      type: String,
+      required: [true, 'User ID is required'],
+      index: true
     }
   },
   {
     timestamps: true
   }
 );
+
+// Compound index for optimized filtering
+AssignmentSchema.index({ userId: 1, createdAt: -1 });
 
 export const Assignment = model<IAssignmentDoc>('Assignment', AssignmentSchema);

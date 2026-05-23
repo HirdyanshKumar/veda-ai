@@ -7,9 +7,9 @@ interface AssignmentStore {
   assignments: IAssignment[];
   isLoadingList: boolean;
   listError: string | null;
-  fetchAssignments: () => Promise<void>;
+  fetchAssignments: (token?: string) => Promise<void>;
   setAssignments: (assignments: IAssignment[]) => void;
-  deleteAssignment: (id: string) => Promise<void>;
+  deleteAssignment: (id: string, token?: string) => Promise<void>;
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
   clearMenu: () => void;
@@ -24,7 +24,7 @@ interface AssignmentStore {
   addQuestionTypeRow: () => void;
   removeQuestionTypeRow: (id: string) => void;
   updateQuestionTypeRow: (id: string, field: keyof IQuestionTypeRow, value: any) => void;
-  submitAssignment: () => Promise<string>; // returns assignmentId
+  submitAssignment: (token?: string) => Promise<string>; // returns assignmentId
   resetForm: () => void;
   setSubmitting: (submitting: boolean) => void;
 
@@ -34,11 +34,14 @@ interface AssignmentStore {
   paperError: string | null;
   setPaper: (paper: IGeneratedPaper) => void;
   setPaperError: (error: string | null) => void;
-  fetchPaper: (id: string) => Promise<void>;
+  fetchPaper: (id: string, token?: string) => Promise<void>;
 
   // Computed
   totalQuestions: () => number;
   totalMarks: () => number;
+
+  // Reset
+  resetStore: () => void;
 }
 
 const initialFormData = (): ICreateFormData => ({
@@ -61,19 +64,19 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
 
   setAssignments: (assignments) => set({ assignments }),
 
-  fetchAssignments: async () => {
+  fetchAssignments: async (token?: string) => {
     set({ isLoadingList: true, listError: null });
     try {
-      const data = await api.getAssignments();
+      const data = await api.getAssignments(token);
       set({ assignments: data, isLoadingList: false });
     } catch (error: any) {
       set({ listError: error.message || "Failed to fetch assignments", isLoadingList: false });
     }
   },
 
-  deleteAssignment: async (id: string) => {
+  deleteAssignment: async (id: string, token?: string) => {
     try {
-      await api.deleteAssignment(id);
+      await api.deleteAssignment(id, token);
       set((state) => ({
         assignments: state.assignments.filter((a) => a._id !== id)
       }));
@@ -130,10 +133,10 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
     }
   })),
 
-  submitAssignment: async () => {
+  submitAssignment: async (token?: string) => {
     set({ isSubmitting: true, submitError: null });
     try {
-      const assignment = await api.createAssignment(get().formData);
+      const assignment = await api.createAssignment(get().formData, token);
       set((state) => ({
         assignments: [assignment, ...state.assignments],
         isSubmitting: false
@@ -160,10 +163,10 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
   setPaper: (paper) => set({ currentPaper: paper, paperLoading: false, paperError: null }),
   setPaperError: (error) => set({ paperError: error, paperLoading: false }),
 
-  fetchPaper: async (id: string) => {
+  fetchPaper: async (id: string, token?: string) => {
     set({ paperLoading: true, paperError: null, currentPaper: null });
     try {
-      const paper = await api.getPaper(id);
+      const paper = await api.getPaper(id, token);
       if (paper === null) {
         set({ paperLoading: true }); // still waiting for socket
       } else {
@@ -173,6 +176,18 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
       set({ paperError: error.message || "Failed to fetch generated paper", paperLoading: false });
     }
   },
+
+  resetStore: () => set({
+    assignments: [],
+    currentPaper: null,
+    formData: initialFormData(),
+    currentStep: 1,
+    submitError: null,
+    paperError: null,
+    listError: null,
+    isLoadingList: false,
+    paperLoading: false
+  }),
 
   // Computed properties
   totalQuestions: () => {

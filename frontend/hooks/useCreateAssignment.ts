@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAssignmentStore } from '../store/assignmentStore';
 import { api } from '../lib/api';
+import { useAuth } from '@clerk/nextjs';
 
 export const useCreateAssignment = () => {
   const router = useRouter();
@@ -114,6 +115,8 @@ export const useCreateAssignment = () => {
     }
   };
 
+  const { getToken } = useAuth();
+
   const submitForm = async (): Promise<string | null> => {
     if (!validateStepTwo()) return null;
 
@@ -121,7 +124,8 @@ export const useCreateAssignment = () => {
     setSubmitError(null);
 
     try {
-      const assignment = await api.createAssignment(formData);
+      const token = await getToken();
+      const assignment = await api.createAssignment(formData, token || undefined);
       
       // Update local state in store
       setAssignments([assignment, ...assignments]);

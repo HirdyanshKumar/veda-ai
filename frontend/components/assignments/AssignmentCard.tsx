@@ -4,6 +4,7 @@ import { MoreVertical } from 'lucide-react';
 import { IAssignment } from '../../types';
 import { useAssignmentStore } from '../../store/assignmentStore';
 import { DeleteConfirmModal } from './DeleteConfirmModal';
+import { useAuth } from '@clerk/nextjs';
 
 interface AssignmentCardProps {
   assignment: IAssignment;
@@ -12,6 +13,7 @@ interface AssignmentCardProps {
 export const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
   const router = useRouter();
   const { openMenuId, setOpenMenuId, clearMenu, deleteAssignment } = useAssignmentStore();
+  const { getToken } = useAuth();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const isMenuOpen = openMenuId === assignment._id;
@@ -142,7 +144,10 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) =>
       <DeleteConfirmModal 
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
-        onConfirm={() => deleteAssignment(assignment._id)}
+        onConfirm={async () => {
+          const token = await getToken();
+          await deleteAssignment(assignment._id, token || undefined);
+        }}
         title={assignment.title}
       />
     </>

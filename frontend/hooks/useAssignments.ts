@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAssignmentStore } from '../store/assignmentStore';
 import { api } from '../lib/api';
 import { IAssignment } from '../types';
+import { useAuth } from '@clerk/nextjs';
 
 export const useAssignments = () => {
   const [assignments, setLocalAssignments] = useState<IAssignment[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { getToken } = useAuth();
 
   const { setAssignments } = useAssignmentStore();
 
@@ -14,7 +16,8 @@ export const useAssignments = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.getAssignments();
+      const token = await getToken();
+      const data = await api.getAssignments(token || undefined);
       setLocalAssignments(data);
       // Synchronize in Zustand store
       setAssignments(data);
@@ -23,7 +26,7 @@ export const useAssignments = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [setAssignments]);
+  }, [setAssignments, getToken]);
 
   useEffect(() => {
     fetchList();

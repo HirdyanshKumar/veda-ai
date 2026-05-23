@@ -9,6 +9,7 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "@clerk/backend": "^3.4.13",
     "@google/generative-ai": "^0.11.0",
     "bullmq": "^5.8.3",
     "cors": "^2.8.5",

@@ -12,14 +12,28 @@ import {
   Settings,
   Sparkles 
 } from 'lucide-react';
+import { useAssignmentStore } from '@/store/assignmentStore';
+import { useUser, useAuth } from '@clerk/nextjs';
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
+  const assignments = useAssignmentStore((state) => state.assignments);
+  const fetchAssignments = useAssignmentStore((state) => state.fetchAssignments);
+  const { user, isLoaded } = useUser();
+  const { getToken } = useAuth();
+
+  React.useEffect(() => {
+    const syncAssignments = async () => {
+      const token = await getToken();
+      fetchAssignments(token || undefined);
+    };
+    syncAssignments();
+  }, [fetchAssignments, getToken]);
 
   const navItems = [
     { label: 'Home', icon: LayoutGrid, href: '/home' },
     { label: 'My Groups', icon: Users, href: '/groups' },
-    { label: 'Assignments', icon: FileText, href: '/assignments', badge: 10 },
+    { label: 'Assignments', icon: FileText, href: '/assignments', badge: assignments.length > 0 ? assignments.length : undefined },
     { label: "AI Teacher's Toolkit", icon: Smartphone, href: '/toolkit' },
     { label: 'My Library', icon: Clock, href: '/library' },
   ];
@@ -96,20 +110,34 @@ const Sidebar: React.FC = () => {
         </Link>
 
         {/* School Footer Card */}
-        <div className="bg-[#F3F4F6] rounded-[20px] p-3 flex items-center gap-3 border border-neutral-100/50 shadow-sm">
-          {/* Bored Ape cartoon mascot illustration avatar matching screenshot */}
-          <div className="w-[44px] h-[44px] rounded-full overflow-hidden border border-[#E2E8F0] shadow-sm select-none bg-orange-100">
-            <img 
-              src="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?auto=format&fit=crop&w=100&h=100&q=80" 
-              alt="School Mascot Avatar" 
-              className="w-full h-full object-cover"
-            />
+        {!isLoaded ? (
+          <div className="bg-[#F3F4F6] rounded-[20px] p-3 flex items-center gap-3 border border-neutral-100/50 shadow-sm animate-pulse h-[68px]" />
+        ) : (
+          <div className="bg-[#F3F4F6] rounded-[20px] p-3 flex items-center gap-3 border border-neutral-100/50 shadow-sm">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-[#E2E8F0] shadow-sm select-none bg-orange-100 flex-shrink-0">
+              {user?.imageUrl ? (
+                <img 
+                  src={user.imageUrl} 
+                  alt="User Avatar" 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-neutral-300" />
+              )}
+            </div>
+            <div className="flex flex-col min-w-0 flex-1">
+              <span className="font-bold text-sm text-[#1A1A1A] truncate leading-snug">
+                {user?.organizationMemberships?.[0]?.organization?.name || 
+                 (user?.publicMetadata?.school as string) || 
+                 user?.emailAddresses[0]?.emailAddress || 
+                 "VedaAI Teacher"}
+              </span>
+              <span className="text-[12px] font-medium text-[#6B7280] truncate leading-tight mt-0.5">
+                {(user?.publicMetadata?.location as string) || "Teacher"}
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="font-bold text-sm text-[#1A1A1A] truncate leading-snug">Delhi Public School</span>
-            <span className="text-[12px] font-medium text-[#6B7280] truncate leading-tight mt-0.5">Bokaro Steel City</span>
-          </div>
-        </div>
+        )}
       </div>
     </aside>
   );

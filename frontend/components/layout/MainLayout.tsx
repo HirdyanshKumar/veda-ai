@@ -7,6 +7,8 @@ import BottomNav from './BottomNav';
 import { Plus } from 'lucide-react';
 
 import { useRouter, usePathname } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
+import { useAssignmentStore } from '@/store/assignmentStore';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -15,12 +17,34 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { isLoaded, isSignedIn } = useAuth();
+  const resetStore = useAssignmentStore((state) => state.resetStore);
   
   const isOutputPage = pathname?.startsWith('/assignments/') && pathname !== '/assignments/create' && pathname !== '/assignments';
+
+  React.useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      resetStore();
+      router.push('/sign-in');
+    }
+  }, [isLoaded, isSignedIn, resetStore, router]);
 
   const handleCreateAssignment = () => {
     router.push('/assignments/create');
   };
+
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-[#EEEEEE] to-[#DADADA] font-sans antialiased">
+        <div className="bg-white rounded-3xl p-10 max-w-[320px] w-full text-center flex flex-col items-center gap-4 shadow-xl border border-neutral-100 animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-12 h-12 rounded-full border-4 border-neutral-100 border-t-[#FF5623] animate-spin" />
+          <h3 className="text-[18px] font-bold text-[#303030]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+            Loading VedaAI...
+          </h3>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-[#EEEEEE] to-[#DADADA] md:p-4 overflow-x-hidden md:overflow-auto font-sans antialiased print:bg-white print:p-0 print:min-h-0 print:h-auto print:block">

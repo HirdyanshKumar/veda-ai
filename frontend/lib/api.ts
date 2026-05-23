@@ -3,6 +3,13 @@ import { IAssignment, IGeneratedPaper, ICreateFormData } from '../types';
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
 const handleResponse = async (response: Response) => {
+  if (response.status === 401) {
+    // Redirect unauthenticated requests to sign-in page
+    if (typeof window !== 'undefined') {
+      window.location.href = "/sign-in";
+    }
+    throw new Error("Unauthorized");
+  }
   if (!response.ok) {
     let errorMessage = "An error occurred during the request";
     try {
@@ -17,14 +24,22 @@ const handleResponse = async (response: Response) => {
   return result;
 };
 
+const getHeaders = (token?: string) => {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+};
+
 export const api = {
-  getAssignments: async (): Promise<IAssignment[]> => {
+  getAssignments: async (token?: string): Promise<IAssignment[]> => {
     try {
       const response = await fetch(`${BASE_URL}/assignments`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeaders(token),
         cache: 'no-store'
       });
       const data = await handleResponse(response);
@@ -34,7 +49,7 @@ export const api = {
     }
   },
 
-  createAssignment: async (payload: ICreateFormData): Promise<IAssignment> => {
+  createAssignment: async (payload: ICreateFormData, token?: string): Promise<IAssignment> => {
     try {
       const numberOfQuestions = payload.questionTypeRows.reduce((sum, r) => sum + r.questions, 0);
       const totalMarks = payload.questionTypeRows.reduce((sum, r) => sum + (r.questions * r.marks), 0);
@@ -69,9 +84,7 @@ export const api = {
 
       const response = await fetch(`${BASE_URL}/assignments`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeaders(token),
         body: JSON.stringify(bodyPayload),
       });
       const data = await handleResponse(response);
@@ -81,13 +94,11 @@ export const api = {
     }
   },
 
-  getAssignment: async (id: string): Promise<IAssignment> => {
+  getAssignment: async (id: string, token?: string): Promise<IAssignment> => {
     try {
       const response = await fetch(`${BASE_URL}/assignments/${id}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeaders(token),
         cache: 'no-store'
       });
       const data = await handleResponse(response);
@@ -97,13 +108,11 @@ export const api = {
     }
   },
 
-  getPaper: async (id: string): Promise<IGeneratedPaper | null> => {
+  getPaper: async (id: string, token?: string): Promise<IGeneratedPaper | null> => {
     try {
       const response = await fetch(`${BASE_URL}/assignments/${id}/paper`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeaders(token),
         cache: 'no-store'
       });
 
@@ -118,13 +127,11 @@ export const api = {
     }
   },
 
-  deleteAssignment: async (id: string): Promise<void> => {
+  deleteAssignment: async (id: string, token?: string): Promise<void> => {
     try {
       const response = await fetch(`${BASE_URL}/assignments/${id}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: getHeaders(token),
       });
       await handleResponse(response);
     } catch (err: any) {
@@ -132,3 +139,4 @@ export const api = {
     }
   }
 };
+export default api;

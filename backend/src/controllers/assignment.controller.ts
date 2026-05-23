@@ -44,6 +44,7 @@ export const createAssignment = async (req: Request, res: Response): Promise<voi
 
     // 2. Save Assignment to DB
     const assignment = new Assignment({
+      userId: req.userId,
       title: validatedData.title,
       subject: validatedData.subject,
       dueDate: parsedDueDate,
@@ -91,7 +92,7 @@ export const createAssignment = async (req: Request, res: Response): Promise<voi
 
 export const getAssignments = async (req: Request, res: Response): Promise<void> => {
   try {
-    const assignments = await Assignment.find().sort({ createdAt: -1 });
+    const assignments = await Assignment.find({ userId: req.userId }).sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       data: assignments
@@ -119,11 +120,11 @@ export const getAssignment = async (req: Request, res: Response): Promise<void> 
     }
 
     // 2. Fetch assignment
-    const assignment = await Assignment.findById(id);
+    const assignment = await Assignment.findOne({ _id: id, userId: req.userId });
     if (!assignment) {
       res.status(404).json({
         success: false,
-        message: "Assignment not found"
+        message: "Assignment not found or unauthorized"
       });
       return;
     }
@@ -156,11 +157,11 @@ export const getGeneratedPaper = async (req: Request, res: Response): Promise<vo
     }
 
     // 2. Fetch assignment
-    const assignment = await Assignment.findById(id);
+    const assignment = await Assignment.findOne({ _id: id, userId: req.userId });
     if (!assignment) {
       res.status(404).json({
         success: false,
-        message: "Assignment not found"
+        message: "Assignment not found or unauthorized"
       });
       return;
     }
@@ -215,9 +216,9 @@ export const deleteAssignment = async (req: Request, res: Response): Promise<voi
       res.status(400).json({ success: false, message: "Invalid ID format" });
       return;
     }
-    const assignment = await Assignment.findByIdAndDelete(id);
+    const assignment = await Assignment.findOneAndDelete({ _id: id, userId: req.userId });
     if (!assignment) {
-      res.status(404).json({ success: false, message: "Assignment not found" });
+      res.status(404).json({ success: false, message: "Assignment not found or unauthorized" });
       return;
     }
     // Delete the related generated paper if any

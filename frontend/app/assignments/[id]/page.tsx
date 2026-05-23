@@ -11,11 +11,13 @@ import QuestionsList from '@/components/output/QuestionsList';
 import { ChevronLeft, Download, RefreshCw, AlertCircle } from 'lucide-react';
 import { api } from '@/lib/api';
 import { IAssignment } from '@/types';
+import { useAuth } from '@clerk/nextjs';
 
 export default function AssignmentOutputPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
+  const { getToken } = useAuth();
 
   const { 
     currentPaper, 
@@ -34,12 +36,13 @@ export default function AssignmentOutputPage() {
     if (!id) return;
     setMetaLoading(true);
     try {
-      const meta = await api.getAssignment(id);
+      const token = await getToken();
+      const meta = await api.getAssignment(id, token || undefined);
       setAssignment(meta);
       
       // If assignment is already completed, fetch the paper
       if (meta.status === 'completed') {
-        await fetchPaper(id);
+        await fetchPaper(id, token || undefined);
       }
     } catch (err: any) {
       setPaperError(err?.message || "Failed to load assignment details");
@@ -58,12 +61,16 @@ export default function AssignmentOutputPage() {
     onReady: (paper) => {
       setPaper(paper);
       // reload metadata so status reflects completed
-      api.getAssignment(id).then(setAssignment).catch(console.error);
+      getToken().then(token => {
+        api.getAssignment(id, token || undefined).then(setAssignment).catch(console.error);
+      });
     },
     onFailed: (error) => {
       setPaperError(error);
       // reload metadata so status reflects failed
-      api.getAssignment(id).then(setAssignment).catch(console.error);
+      getToken().then(token => {
+        api.getAssignment(id, token || undefined).then(setAssignment).catch(console.error);
+      });
     }
   });
 

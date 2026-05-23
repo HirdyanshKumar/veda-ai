@@ -6,8 +6,12 @@ import {
   getGeneratedPaper,
   deleteAssignment
 } from '../controllers/assignment.controller';
+import { verifyAuth } from '../middleware/auth.middleware';
 
 const router = Router();
+
+// Secure all assignment endpoints
+router.use(verifyAuth);
 
 // Routes
 router.post('/', createAssignment);
