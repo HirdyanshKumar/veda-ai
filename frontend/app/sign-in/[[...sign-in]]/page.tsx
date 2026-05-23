@@ -7,7 +7,6 @@ export default function SignInPage() {
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#EEEEEE] to-[#DADADA] p-6">
       
-      {/* Top Branding Section */}
       <div className="flex flex-col items-center text-center gap-2 mb-8">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF9800] via-[#FF5722] to-[#E64A19] flex items-center justify-center shadow-md shadow-[#E64A19]/25 select-none">
@@ -27,7 +26,6 @@ export default function SignInPage() {
         </p>
       </div>
 
-      {/* Clerk SignIn Form */}
       <SignIn
         path="/sign-in"
         appearance={{
@@ -43,7 +41,6 @@ export default function SignInPage() {
         }}
       />
 
-      {/* Footer Disclaimer */}
       <p className="text-xs text-[#9CA3AF] mt-6 text-center font-medium">
         For teachers only — student access coming soon
       </p>

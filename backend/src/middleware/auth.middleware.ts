@@ -12,7 +12,6 @@ declare global {
 
 export const verifyAuth = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    // 1. Extract auth header
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
@@ -25,12 +24,10 @@ export const verifyAuth = async (req: Request, res: Response, next: NextFunction
 
     const token = authHeader.split(' ')[1];
 
-    // 2. Verify token
     const verifiedToken = await verifyToken(token, {
       secretKey: process.env.CLERK_SECRET_KEY
     });
 
-    // 3. Extract userId (sub)
     const userId = verifiedToken.sub;
     if (!userId) {
       res.status(401).json({
@@ -41,7 +38,6 @@ export const verifyAuth = async (req: Request, res: Response, next: NextFunction
       return;
     }
 
-    // 4. Attach to request
     req.userId = userId;
     req.clerkToken = token;
 

@@ -9,8 +9,6 @@ export const generatePaper = async (
 ): Promise<IGeneratedPaper> => {
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
   if (!apiKey || apiKey === 'your_key_here') {
-    // Provide clean, high-fidelity mock fallback if no API key is set
-    // to facilitate seamless testing of the queue, worker, and sockets without crashing!
     console.warn("GOOGLE_GEMINI_API_KEY not set. Generating high-fidelity mock CBSE science paper.");
     
     const mockPaper: IGeneratedPaper = {
@@ -49,25 +47,19 @@ export const generatePaper = async (
       ]
     };
     
-    // Add small artificial delay to simulate real network request
     await new Promise(resolve => setTimeout(resolve, 1500));
     return mockPaper;
   }
 
-  // 1. Initialize Gemini
   const genAI = new GoogleGenerativeAI(apiKey);
   
-  // 2. Get Model
   const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-  // 3. Generate Prompt
   const prompt = buildPrompt(assignment);
 
-  // 4. Generate Content
   const result = await model.generateContent(prompt);
   const responseText = result.response.text();
 
-  // 5. Clean markdown fences
   const cleanedText = responseText.replace(/^\s*```json\s*|```\s*$/g, '').trim();
 
   let parsedData: any;
@@ -77,10 +69,8 @@ export const generatePaper = async (
     throw new Error("Failed to parse AI response as JSON");
   }
 
-  // 6. Inject assignmentId
   parsedData.assignmentId = assignmentId;
 
-  // 7. Zod validation
   const validation = generatedPaperSchema.safeParse(parsedData);
   if (!validation.success) {
     console.error("Zod Validation Error on AI payload:", validation.error);

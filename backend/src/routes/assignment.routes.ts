@@ -4,17 +4,17 @@ import {
   getAssignments, 
   getAssignment, 
   getGeneratedPaper,
-  deleteAssignment
+  deleteAssignment,
+  regenerateAssignment
 } from '../controllers/assignment.controller';
 import { verifyAuth } from '../middleware/auth.middleware';
 
 const router = Router();
 
-// Secure all assignment endpoints
 router.use(verifyAuth);
 
-// Routes
 router.post('/', createAssignment);
+router.post('/:id/regenerate', regenerateAssignment);
 router.get('/', getAssignments);
 router.get('/:id', getAssignment);
 router.get('/:id/paper', getGeneratedPaper);

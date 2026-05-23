@@ -19,7 +19,6 @@ export const useAssignments = () => {
       const token = await getToken();
       const data = await api.getAssignments(token || undefined);
       setLocalAssignments(data);
-      // Synchronize in Zustand store
       setAssignments(data);
     } catch (err: any) {
       setError(err?.message || "Failed to fetch assignments");

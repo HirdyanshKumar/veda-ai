@@ -12,14 +12,12 @@ interface CreateAssignmentStore {
   dueDate: string;
   additionalInfo: string;
   
-  // Actions
   setDueDate: (date: string) => void;
   setAdditionalInfo: (info: string) => void;
   addQuestionType: () => void;
   removeQuestionType: (id: string) => void;
   updateQuestionType: (id: string, field: 'type' | 'questions' | 'marks', value: any) => void;
   
-  // Computed values
   getTotalQuestions: () => number;
   getTotalMarks: () => number;
 }

@@ -47,7 +47,6 @@ export const useCreateAssignment = () => {
     if (!formData.dueDate || !formData.dueDate.trim()) {
       errors.dueDate = "Due Date is required";
     } else {
-      // Basic future date validation
       const parts = formData.dueDate.split('-');
       if (parts.length === 3) {
         const day = parseInt(parts[0], 10);
@@ -70,7 +69,6 @@ export const useCreateAssignment = () => {
     if (!formData.questionTypeRows || formData.questionTypeRows.length === 0) {
       errors.questionTypeRows = "At least one question type is required";
     } else {
-      // Validate individual rows
       const rowTypes = new Set<string>();
       formData.questionTypeRows.forEach((row) => {
         if (!row.type || !row.type.trim()) {
@@ -127,14 +125,11 @@ export const useCreateAssignment = () => {
       const token = await getToken();
       const assignment = await api.createAssignment(formData, token || undefined);
       
-      // Update local state in store
       setAssignments([assignment, ...assignments]);
-      
-      // Reset wizard form
       resetForm();
       
       setIsSubmitting(false);
-      router.push(`/assignments/${assignment._id}`);
+      router.push(`/loading/${assignment._id}`);
       return assignment._id;
     } catch (err: any) {
       setSubmitError(err?.message || "Failed to submit assignment");

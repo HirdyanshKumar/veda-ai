@@ -13,18 +13,15 @@ export const generationWorker = new Worker<IJobPayload>(
     console.log(`[Worker] Started processing assignment: ${assignmentId}`);
 
     try {
-      // Step 2: Fetch Assignment
       const assignment = await Assignment.findById(assignmentId);
       if (!assignment) {
         throw new Error("Assignment not found");
       }
 
-      // Step 3: Update status to processing
       assignment.status = 'processing';
       await assignment.save();
       console.log(`[Worker] Status updated to 'processing' for: ${assignmentId}`);
 
-      // Step 4: Build IAssignmentInput
       const assignmentInput: IAssignmentInput = {
         title: assignment.title,
         subject: assignment.subject,
@@ -37,12 +34,9 @@ export const generationWorker = new Worker<IJobPayload>(
         fileUrl: assignment.fileUrl
       };
 
-      // Step 5: Call generatePaper
       console.log(`[Worker] Triggering Gemini AI generator for: ${assignmentId}`);
       const result = await generatePaper(assignmentInput, assignmentId);
 
-      // Step 6: Save GeneratedPaper
-      // Make sure we delete any previously failed papers first (to support retry attempts)
       await GeneratedPaper.deleteOne({ assignmentId });
       
       const paper = new GeneratedPaper({
@@ -52,12 +46,10 @@ export const generationWorker = new Worker<IJobPayload>(
       await paper.save();
       console.log(`[Worker] Generated paper saved in MongoDB for: ${assignmentId}`);
 
-      // Step 7: Update assignment status to completed
       assignment.status = 'completed';
       await assignment.save();
       console.log(`[Worker] Status updated to 'completed' for: ${assignmentId}`);
 
-      // Step 8: Emit paper:ready via socket
       try {
         const io = getIO();
         const payload = {
@@ -67,7 +59,6 @@ export const generationWorker = new Worker<IJobPayload>(
             sections: result.sections
           }
         };
-        // Emit to room for isolated updates, and broadcast globally to be extra safe
         io.to(assignmentId).emit('paper:ready', payload);
         io.emit('paper:ready', payload);
         console.log(`[Worker] Emitted 'paper:ready' event for: ${assignmentId}`);
@@ -80,7 +71,6 @@ export const generationWorker = new Worker<IJobPayload>(
     } catch (error: any) {
       console.error(`[Worker] Error generating paper for ${assignmentId}:`, error);
 
-      // On error, update status to failed
       try {
         const assignment = await Assignment.findById(assignmentId);
         if (assignment) {
@@ -92,7 +82,6 @@ export const generationWorker = new Worker<IJobPayload>(
         console.error(`[Worker] DB fallback status update failed:`, dbErr);
       }
 
-      // Emit paper:failed via socket
       try {
         const io = getIO();
         const payload = {
@@ -106,7 +95,6 @@ export const generationWorker = new Worker<IJobPayload>(
         console.error(`[Worker] Socket emission error failed:`, sockErr);
       }
 
-      // Re-throw the error so BullMQ handles attempts/exponential backoff
       throw error;
     }
   },

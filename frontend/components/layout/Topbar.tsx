@@ -16,13 +16,7 @@ const Topbar: React.FC = () => {
       className="absolute top-[16px] left-4 right-4 h-[76px] bg-white rounded-[28px] shadow-[0px_8px_30px_rgba(0,0,0,0.06)] border border-white/40 flex items-center justify-between select-none px-[18px] z-30
                  md:absolute md:top-[12px] md:left-[327px] md:right-auto md:w-[1100px] md:h-14 md:bg-[rgba(255,255,255,0.75)] md:backdrop-blur-[12px] md:pl-6 md:pr-3 md:rounded-[16px] md:border md:border-[rgba(255,255,255,0.2)] md:shadow-sm md:px-0 print:hidden"
     >
-      {/* ======================================================== */}
-      {/* MOBILE HEADER LAYOUT (Below md)                          */}
-      {/* ======================================================== */}
-      
-      {/* Left Side: VedaAI Logo (Mobile Only) */}
       <div className="flex md:hidden items-center gap-3">
-        {/* Figma custom Veda logo scaled beautifully to 42x42px using viewBox */}
         <div className="select-none flex items-center justify-center shadow-md shadow-black/5 rounded-[10px] overflow-hidden">
           <svg width="42" height="42" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="#303030"/>
@@ -42,9 +36,7 @@ const Topbar: React.FC = () => {
         <span className="text-[22px] font-bold text-[#1A1A1A] tracking-tight font-sans">VedaAI</span>
       </div>
  
-      {/* Right Side: Bell, Avatar, Menu Icon (Mobile Only) */}
       <div className="flex md:hidden items-center gap-3">
-        {/* Notifications Icon with Red Dot Badge */}
         <button 
           className="relative w-11 h-11 rounded-full flex items-center justify-center bg-[#F2F2F3] text-[#1A1A1A] hover:bg-[#E4E4E7] active:scale-95 transition-all duration-200"
           aria-label="Notifications"
@@ -53,7 +45,6 @@ const Topbar: React.FC = () => {
           <span className="absolute top-[2px] right-[2px] w-[10px] h-[10px] bg-[#FF4D2D] rounded-full border-[2px] border-white"></span>
         </button>
  
-        {/* User Profile Avatar */}
         <div className="w-11 h-11 rounded-full flex items-center justify-center select-none">
           {!isLoaded ? (
             <div className="w-11 h-11 rounded-full bg-neutral-200 animate-pulse" />
@@ -69,7 +60,6 @@ const Topbar: React.FC = () => {
           )}
         </div>
  
-        {/* Hamburger Menu Icon */}
         <button 
           className="w-11 h-11 flex flex-col items-center justify-center gap-[5px] text-[#1A1A1A] hover:bg-neutral-100 rounded-full transition-colors active:scale-95"
           aria-label="Toggle menu"
@@ -80,12 +70,6 @@ const Topbar: React.FC = () => {
         </button>
       </div>
  
- 
-      {/* ======================================================== */}
-      {/* DESKTOP HEADER LAYOUT (md and above)                     */}
-      {/* ======================================================== */}
- 
-      {/* Left Side: Breadcrumb & Nav Actions (Desktop Only) */}
       <div className="hidden md:flex items-center">
         {isOutputPage ? (
           <button 
@@ -97,7 +81,6 @@ const Topbar: React.FC = () => {
           </button>
         ) : (
           <>
-            {/* Back Button */}
             <button 
               onClick={() => router.back()}
               className="w-8 h-8 rounded-lg flex items-center justify-center text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1A1A1A] transition-colors"
@@ -106,13 +89,10 @@ const Topbar: React.FC = () => {
               <ChevronLeft size={20} />
             </button>
  
-            {/* Separator / Spacer */}
             <div className="w-[1px] h-4 bg-[#E5E7EB] mx-2"></div>
  
-            {/* Dashboard Icon */}
             <LayoutGrid size={20} className="text-[#6B7280] ml-1" />
  
-            {/* Breadcrumb Label */}
             <span className="text-[15px] font-medium text-[#6B7280] ml-2">
               Assignment
             </span>
@@ -120,9 +100,7 @@ const Topbar: React.FC = () => {
         )}
       </div>
  
-      {/* Right Side: Notifications & Profile (Desktop Only) */}
       <div className="hidden md:flex items-center gap-4">
-        {/* Notifications Icon with Red Dot Badge */}
         <button 
           className="relative w-8 h-8 rounded-lg flex items-center justify-center text-[#6B7280] hover:bg-[#F3F4F6] hover:text-[#1A1A1A] transition-colors"
           aria-label="Notifications"
@@ -132,10 +110,8 @@ const Topbar: React.FC = () => {
           <span className="absolute top-[6px] right-[6px] w-[8px] h-[8px] bg-[#EF4444] rounded-full border border-white"></span>
         </button>
  
-        {/* Vertical Divider */}
         <div className="w-[1px] h-6 bg-[#E5E7EB]"></div>
  
-        {/* User Profile Dropdown Button */}
         {!isLoaded ? (
           <div className="w-[120px] h-8 bg-neutral-200 animate-pulse rounded-full" />
         ) : (

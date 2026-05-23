@@ -30,7 +30,6 @@ interface OutputStore {
   isLoading: boolean;
   error: string | null;
   
-  // Actions
   setPaper: (paper: GeneratedPaper | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -39,7 +38,7 @@ interface OutputStore {
 
 const mockPaper: GeneratedPaper = {
   schoolName: "Delhi Public School, Sector-4, Bokaro",
-  subject: "English", // as specified in the template "Subject: English" or NCERT chapter science. Let's match the exact text.
+  subject: "English",
   className: "5th",
   section: "A",
   timeAllowed: "45 minutes",
@@ -84,6 +83,6 @@ export const useOutputStore = create<OutputStore>((set, get) => ({
     set({ isLoading: true, error: null, generatedPaper: null });
     setTimeout(() => {
       set({ isLoading: false, generatedPaper: mockPaper });
-    }, 1800); // 1.8 second delay to show the beautiful generation loading states
+    }, 1800);
   }
 }));

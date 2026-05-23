@@ -3,7 +3,6 @@ import { IAssignment, IGeneratedPaper, ICreateFormData, IQuestionTypeRow } from 
 import { api } from '../lib/api';
 
 interface AssignmentStore {
-  // Assignments list
   assignments: IAssignment[];
   isLoadingList: boolean;
   listError: string | null;
@@ -14,7 +13,6 @@ interface AssignmentStore {
   setOpenMenuId: (id: string | null) => void;
   clearMenu: () => void;
 
-  // Create form
   currentStep: 1 | 2;
   formData: ICreateFormData;
   isSubmitting: boolean;
@@ -24,11 +22,10 @@ interface AssignmentStore {
   addQuestionTypeRow: () => void;
   removeQuestionTypeRow: (id: string) => void;
   updateQuestionTypeRow: (id: string, field: keyof IQuestionTypeRow, value: any) => void;
-  submitAssignment: (token?: string) => Promise<string>; // returns assignmentId
+  submitAssignment: (token?: string) => Promise<string>;
   resetForm: () => void;
   setSubmitting: (submitting: boolean) => void;
 
-  // Generated paper
   currentPaper: IGeneratedPaper | null;
   paperLoading: boolean;
   paperError: string | null;
@@ -36,11 +33,9 @@ interface AssignmentStore {
   setPaperError: (error: string | null) => void;
   fetchPaper: (id: string, token?: string) => Promise<void>;
 
-  // Computed
   totalQuestions: () => number;
   totalMarks: () => number;
 
-  // Reset
   resetStore: () => void;
 }
 
@@ -56,7 +51,6 @@ const initialFormData = (): ICreateFormData => ({
 });
 
 export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
-  // Assignments list state
   assignments: [],
   isLoadingList: false,
   listError: null,
@@ -88,7 +82,6 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
   setOpenMenuId: (id) => set({ openMenuId: id }),
   clearMenu: () => set({ openMenuId: null }),
 
-  // Create form state
   currentStep: 1,
   formData: initialFormData(),
   isSubmitting: false,
@@ -155,7 +148,6 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
     isSubmitting: false
   }),
 
-  // Generated paper state
   currentPaper: null,
   paperLoading: false,
   paperError: null,
@@ -168,7 +160,7 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
     try {
       const paper = await api.getPaper(id, token);
       if (paper === null) {
-        set({ paperLoading: true }); // still waiting for socket
+        set({ paperLoading: true });
       } else {
         set({ currentPaper: paper, paperLoading: false });
       }
@@ -189,7 +181,6 @@ export const useAssignmentStore = create<AssignmentStore>((set, get) => ({
     paperLoading: false
   }),
 
-  // Computed properties
   totalQuestions: () => {
     return get().formData.questionTypeRows.reduce((sum, r) => sum + r.questions, 0);
   },

@@ -42,11 +42,8 @@ const Sidebar: React.FC = () => {
     <aside 
       className="absolute top-[12px] left-[12px] w-[304px] h-[756px] rounded-[32px] bg-[#FFFFFF] p-6 hidden md:flex flex-col justify-between select-none border border-neutral-100/50 shadow-[0_16px_48px_rgba(0,0,0,0.06),0_4px_12px_rgba(0,0,0,0.01)] print:hidden"
     >
-      {/* Top Section */}
       <div className="flex flex-col w-full">
-        {/* Logo Area */}
         <div className="flex items-center gap-3">
-          {/* Logo container with gradient orange-red */}
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF9800] via-[#FF5722] to-[#E64A19] flex items-center justify-center shadow-md shadow-[#E64A19]/25 select-none">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path 
@@ -60,7 +57,6 @@ const Sidebar: React.FC = () => {
           <span className="text-[22px] font-bold text-[#1A1A1A] tracking-tight font-sans">VedaAI</span>
         </div>
 
-        {/* Create Assignment Button */}
         <Link 
           href="/assignments/create"
           className="mt-6 w-full h-12 bg-[#1A1A1A] border-[3px] border-[#E8572A] rounded-full flex items-center justify-center gap-2 text-[#FFFFFF] text-[15px] font-semibold hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-md shadow-black/10 cursor-pointer"
@@ -69,7 +65,6 @@ const Sidebar: React.FC = () => {
           <span>Create Assignment</span>
         </Link>
 
-        {/* Navigation Items */}
         <nav className="mt-8 flex flex-col gap-1.5">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href === '/assignments' && pathname === '/');
@@ -98,9 +93,7 @@ const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      {/* Bottom Section */}
       <div className="flex flex-col gap-4 w-full">
-        {/* Settings Item */}
         <Link
           href="/settings"
           className="h-12 rounded-[14px] px-3.5 flex items-center gap-[12px] text-sm font-medium text-[#6B7280] hover:bg-[#F9FAFB] hover:text-[#1A1A1A] transition-all"
@@ -109,7 +102,6 @@ const Sidebar: React.FC = () => {
           <span>Settings</span>
         </Link>
 
-        {/* School Footer Card */}
         {!isLoaded ? (
           <div className="bg-[#F3F4F6] rounded-[20px] p-3 flex items-center gap-3 border border-neutral-100/50 shadow-sm animate-pulse h-[68px]" />
         ) : (

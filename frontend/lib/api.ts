@@ -4,7 +4,6 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
 const handleResponse = async (response: Response) => {
   if (response.status === 401) {
-    // Redirect unauthenticated requests to sign-in page
     if (typeof window !== 'undefined') {
       window.location.href = "/sign-in";
     }
@@ -55,7 +54,6 @@ export const api = {
       const totalMarks = payload.questionTypeRows.reduce((sum, r) => sum + (r.questions * r.marks), 0);
       const questionTypes = payload.questionTypeRows.map(r => r.type);
 
-      // Parse DD-MM-YYYY -> ISO string before sending
       let formattedDueDate = payload.dueDate;
       if (payload.dueDate.includes('-')) {
         const parts = payload.dueDate.split('-');
@@ -117,7 +115,7 @@ export const api = {
       });
 
       if (response.status === 202) {
-        return null; // still processing
+        return null;
       }
 
       const data = await handleResponse(response);
@@ -136,6 +134,19 @@ export const api = {
       await handleResponse(response);
     } catch (err: any) {
       throw new Error(err.message || "Failed to delete assignment");
+    }
+  },
+
+  regenerateAssignment: async (id: string, token?: string): Promise<IAssignment> => {
+    try {
+      const response = await fetch(`${BASE_URL}/assignments/${id}/regenerate`, {
+        method: 'POST',
+        headers: getHeaders(token),
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to regenerate assignment");
     }
   }
 };

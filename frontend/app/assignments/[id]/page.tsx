@@ -31,7 +31,6 @@ export default function AssignmentOutputPage() {
   const [assignment, setAssignment] = useState<IAssignment | null>(null);
   const [metaLoading, setMetaLoading] = useState(true);
 
-  // Load assignment meta and details
   const loadDetails = async () => {
     if (!id) return;
     setMetaLoading(true);
@@ -40,7 +39,6 @@ export default function AssignmentOutputPage() {
       const meta = await api.getAssignment(id, token || undefined);
       setAssignment(meta);
       
-      // If assignment is already completed, fetch the paper
       if (meta.status === 'completed') {
         await fetchPaper(id, token || undefined);
       }
@@ -55,19 +53,16 @@ export default function AssignmentOutputPage() {
     loadDetails();
   }, [id]);
 
-  // Wire Socket listener for ready/failed events
   useSocket({
     assignmentId: id,
     onReady: (paper) => {
       setPaper(paper);
-      // reload metadata so status reflects completed
       getToken().then(token => {
         api.getAssignment(id, token || undefined).then(setAssignment).catch(console.error);
       });
     },
     onFailed: (error) => {
       setPaperError(error);
-      // reload metadata so status reflects failed
       getToken().then(token => {
         api.getAssignment(id, token || undefined).then(setAssignment).catch(console.error);
       });
@@ -75,7 +70,6 @@ export default function AssignmentOutputPage() {
   });
 
   const handleDownload = () => {
-    // Print window trigger with clean print layouts
     window.print();
   };
 
@@ -83,7 +77,6 @@ export default function AssignmentOutputPage() {
     loadDetails();
   };
 
-  // Human readable date converter helper
   const formatDate = (dateStr: string | undefined) => {
     if (!dateStr) return '';
     if (dateStr.includes('-') && dateStr.split('-').length === 3 && dateStr.length <= 10) {
@@ -101,14 +94,12 @@ export default function AssignmentOutputPage() {
     }
   };
 
-  // Determine state representations
   const isFailed = paperError || (assignment && assignment.status === 'failed');
   const isLoading = 
     metaLoading || 
     paperLoading || 
     (assignment && (assignment.status === 'pending' || assignment.status === 'processing'));
 
-  // State 1 — Loading state
   if (isLoading) {
     return (
       <MainLayout>
@@ -117,7 +108,6 @@ export default function AssignmentOutputPage() {
     );
   }
 
-  // State 2 — Failed state
   if (isFailed || !currentPaper) {
     return (
       <MainLayout>
@@ -154,14 +144,12 @@ export default function AssignmentOutputPage() {
     );
   }
 
-  // State 3 — completed paper card layout
   return (
     <MainLayout>
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         
         @media print {
-          /* Explicit page setups for printing */
           @page {
             size: A4;
             margin: 20mm;
@@ -174,15 +162,10 @@ export default function AssignmentOutputPage() {
         }
       `}} />
 
-      {/* Main outer scrolling layout (Screen view only) */}
       <div className="w-full h-full overflow-hidden flex flex-col relative gap-0 select-none print:hidden">
         
-        {/* ======================================================== */}
-        {/* DESKTOP OUTPUT SCREEN LAYOUT (md and above)              */}
-        {/* ======================================================== */}
         <div className="hidden md:flex flex-col items-center gap-5 w-full max-w-[1100px] h-full max-h-[690px] overflow-y-auto bg-[#5E5E5E] rounded-[32px] p-5 shadow-inner border border-neutral-600/35 relative pr-1.5 -mr-1.5">
           
-          {/* Block 1 — AI Message + Download Bar */}
           <div className="w-full max-w-[1060px] p-[24px_32px] bg-[rgba(24,24,24,0.8)] backdrop-blur-md rounded-[32px] flex flex-col gap-5 items-start justify-center shadow-lg border border-neutral-800/40">
             <p 
               className="text-[20px] font-bold text-white tracking-tight leading-[140%] max-w-[996px]"
@@ -199,7 +182,6 @@ export default function AssignmentOutputPage() {
             </button>
           </div>
 
-          {/* Block 2 — White Paper Card */}
           <div 
             className="w-full max-w-[1060px] p-8 bg-[#FFFFFF] rounded-[32px] flex flex-col gap-6 items-center shadow-2xl border border-neutral-100/50"
           >
@@ -210,22 +192,16 @@ export default function AssignmentOutputPage() {
               totalMarks={assignment?.totalMarks || 80}
             />
 
-            {/* Questions lists */}
             <QuestionsList sections={currentPaper.sections} />
 
-            {/* Print endmark */}
             <div className="text-[16px] font-bold text-[#303030] mt-4 select-none">
               End of Question Paper
             </div>
           </div>
         </div>
 
-        {/* ======================================================== */}
-        {/* MOBILE OUTPUT SCREEN LAYOUT                              */}
-        {/* ======================================================== */}
         <div className="flex md:hidden flex-col gap-3 w-full bg-[#FFFFFF] rounded-[40px] p-2 overflow-y-auto max-h-[calc(100vh-100px)] pb-[100px]">
           
-          {/* Mobile subheader row */}
           <div className="flex items-center gap-3 h-12 px-3 mt-1">
             <button 
               onClick={() => router.push('/assignments')}
@@ -237,7 +213,6 @@ export default function AssignmentOutputPage() {
             <span className="text-base font-semibold text-[#1A1A1A]">Assessment Paper</span>
           </div>
 
-          {/* Block 1 — AI Message Bar (mobile) */}
           <div className="mx-2 p-[24px_16px] bg-[#303030] rounded-[32px] flex items-center justify-between gap-3 shadow-2xl">
             <p 
               className="text-[14px] font-bold text-[#F0F0F0] leading-[17px] tracking-tight flex-1"
@@ -254,7 +229,6 @@ export default function AssignmentOutputPage() {
             </button>
           </div>
 
-          {/* Block 2 — Paper Card (mobile) */}
           <div className="mx-2 p-[24px_16px] bg-[#F6F6F6] rounded-[32px] flex flex-col gap-6 border border-neutral-100/50 shadow-sm">
             <PaperHeader 
               title={assignment?.title || "CBSE Assessment"}
@@ -263,16 +237,12 @@ export default function AssignmentOutputPage() {
               totalMarks={assignment?.totalMarks || 80}
             />
 
-            {/* Questions lists */}
             <QuestionsList sections={currentPaper.sections} />
           </div>
         </div>
 
       </div>
 
-      {/* ======================================================== */}
-      {/* PRINT-ONLY QUESTION PAPER LAYOUT                         */}
-      {/* ======================================================== */}
       <div 
         id="print-paper-sheet"
         className="hidden print:flex flex-col gap-6 items-center w-full bg-white text-black p-0"
@@ -284,10 +254,8 @@ export default function AssignmentOutputPage() {
           totalMarks={assignment?.totalMarks || 80}
         />
 
-        {/* Questions lists */}
         <QuestionsList sections={currentPaper.sections} />
 
-        {/* Print endmark */}
         <div className="text-[16px] font-bold text-[#303030] mt-6 select-none text-center">
           End of Question Paper
         </div>
