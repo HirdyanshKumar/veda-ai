@@ -249,7 +249,24 @@ export const api = {
     } catch (err: any) {
       throw new Error(err.message || "Failed to fetch dashboard stats");
     }
+  },
+
+  onboardUser: async (
+    payload: { role: string; school?: string; location?: string; subject?: string },
+    token?: string
+  ): Promise<void> => {
+    try {
+      const response = await fetch(`${BASE_URL}/user/onboard`, {
+        method: 'POST',
+        headers: getHeaders(token),
+        body: JSON.stringify(payload),
+      });
+      await handleResponse(response);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to complete onboarding");
+    }
   }
 };
 export default api;
+
 

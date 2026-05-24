@@ -494,7 +494,7 @@ export const downloadPDF = async (req: Request, res: Response): Promise<void> =>
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setContent(htmlString, { waitUntil: 'networkidle0' });
+    await page.setContent(htmlString, { waitUntil: 'networkidle0' as any });
     const pdfBuffer = await page.pdf({
       format: 'A4',
       margin: { top: '40px', bottom: '40px', left: '40px', right: '40px' },

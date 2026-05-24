@@ -1,17 +1,46 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-// Define public routes
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/health"
 ]);
 
+const isOnboardingRoute = createRouteMatcher(["/onboarding(.*)"]);
+
 export default clerkMiddleware(async (auth, req) => {
-  console.log("Middleware matching:", req.nextUrl.pathname, "isPublic:", isPublicRoute(req));
-  if (!isPublicRoute(req)) {
-    await auth.protect();
+  const { userId, sessionClaims } = await auth();
+
+  if (isPublicRoute(req)) {
+    return NextResponse.next();
   }
+
+  if (isOnboardingRoute(req)) {
+    if (!userId) {
+      const signInUrl = new URL("/sign-in", req.url);
+      return NextResponse.redirect(signInUrl);
+    }
+    const isOnboarded = (sessionClaims?.metadata as any)?.onboarded;
+    if (isOnboarded === true) {
+      const homeUrl = new URL("/home", req.url);
+      return NextResponse.redirect(homeUrl);
+    }
+    return NextResponse.next();
+  }
+
+  if (!userId) {
+    const signInUrl = new URL("/sign-in", req.url);
+    return NextResponse.redirect(signInUrl);
+  }
+
+  const isOnboarded = (sessionClaims?.metadata as any)?.onboarded;
+  if (!isOnboarded) {
+    const onboardingUrl = new URL("/onboarding", req.url);
+    return NextResponse.redirect(onboardingUrl);
+  }
+
+  return NextResponse.next();
 });
 
 export const config = {

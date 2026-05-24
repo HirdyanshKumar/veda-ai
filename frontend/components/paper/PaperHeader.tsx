@@ -1,4 +1,5 @@
 import React from 'react';
+import { useUser } from '@clerk/nextjs';
 import { IAssignment } from '../../types';
 
 interface PaperHeaderProps {
@@ -6,6 +7,12 @@ interface PaperHeaderProps {
 }
 
 const PaperHeader: React.FC<PaperHeaderProps> = ({ assignment }) => {
+  const { user } = useUser();
+
+  const school = (user?.publicMetadata?.school as string) || '';
+  const location = (user?.publicMetadata?.location as string) || '';
+  const schoolLine = [school, location].filter(Boolean).join(', ');
+
   const formattedDate = assignment.dueDate
     ? new Date(assignment.dueDate).toLocaleDateString('en-IN', {
         day: '2-digit',
@@ -19,6 +26,9 @@ const PaperHeader: React.FC<PaperHeaderProps> = ({ assignment }) => {
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 mb-1">
         Veda AI · Question Paper
       </p>
+      {schoolLine && (
+        <p className="text-sm font-semibold text-gray-600 mb-1">{schoolLine}</p>
+      )}
       <h1 className="text-2xl font-bold text-gray-900 mt-1">{assignment.title}</h1>
       <p className="text-sm text-gray-500 mt-1">{assignment.subject}</p>
 
