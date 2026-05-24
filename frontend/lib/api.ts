@@ -1,4 +1,5 @@
-import { IAssignment, IGeneratedPaper, ICreateFormData } from '../types';
+import { IAssignment, IGeneratedPaper, ICreateFormData, IDashboardStats } from '../types';
+
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
@@ -234,6 +235,21 @@ export const api = {
     } catch (err: any) {
       throw new Error(err.message || "Failed to regenerate paper");
     }
+  },
+
+  getDashboardStats: async (token?: string): Promise<IDashboardStats> => {
+    try {
+      const response = await fetch(`${BASE_URL}/assignments/stats`, {
+        method: 'GET',
+        headers: getHeaders(token),
+        cache: 'no-store'
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to fetch dashboard stats");
+    }
   }
 };
 export default api;
+

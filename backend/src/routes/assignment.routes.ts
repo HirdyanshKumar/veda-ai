@@ -6,13 +6,16 @@ import {
   getGeneratedPaper,
   deleteAssignment,
   regenerateAssignment,
-  downloadPDF
+  downloadPDF,
+  getDashboardStats
 } from '../controllers/assignment.controller';
 import { verifyAuth } from '../middleware/auth.middleware';
 
 const router = Router();
 
 router.use(verifyAuth);
+
+router.get('/stats', getDashboardStats);
 
 router.post('/', createAssignment);
 router.post('/:id/regenerate', regenerateAssignment);

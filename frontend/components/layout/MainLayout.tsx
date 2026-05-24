@@ -61,8 +61,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         {/* Main Content Area (removes desktop offsets and centers on mobile) */}
         <main 
           className={`absolute top-[104px] left-1/2 transform -translate-x-1/2 w-[calc(100vw-20px)] h-[calc(100vh-104px)] flex items-center justify-center bg-transparent ${isOutputPage ? 'pb-4' : 'pb-[120px]'}
-                     md:top-[90px] md:left-[327px] md:w-[1100px] md:h-[678px] md:transform-none md:pb-0 z-10
+                     md:top-[90px] md:left-[327px] md:transform-none md:pb-0 z-10
+                     ${pathname === '/home'
+                       ? 'md:w-[calc(100vw-339px)] md:h-[calc(100vh-90px)] overflow-y-auto'
+                       : 'md:w-[1100px] md:h-[678px] overflow-hidden'}
                      print:static print:w-full print:h-auto print:block print:transform-none print:p-0 print:m-0`}
+          style={pathname === '/home' ? { padding: '24px' } : undefined}
         >
           {children}
         </main>

@@ -511,3 +511,69 @@ export const downloadPDF = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+export const getDashboardStats = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.userId;
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const [
+      totalAssignments,
+      totalPapers,
+      recentAssignments,
+      statusBreakdownRaw,
+      subjectBreakdownRaw,
+      assignmentsThisWeek,
+      allSubjects
+    ] = await Promise.all([
+      Assignment.countDocuments({ userId }),
+      Assignment.countDocuments({ userId, status: 'completed' }),
+      Assignment.find({ userId }).sort({ createdAt: -1 }).limit(5).lean(),
+      Assignment.aggregate([
+        { $match: { userId } },
+        { $group: { _id: '$status', count: { $sum: 1 } } }
+      ]),
+      Assignment.aggregate([
+        { $match: { userId, status: 'completed' } },
+        { $group: { _id: '$subject', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 5 }
+      ]),
+      Assignment.countDocuments({ userId, createdAt: { $gte: sevenDaysAgo } }),
+      Assignment.distinct('subject', { userId })
+    ]);
+
+    const statusBreakdown = { pending: 0, processing: 0, completed: 0, failed: 0 };
+    statusBreakdownRaw.forEach((s: any) => {
+      if (s._id in statusBreakdown) {
+        (statusBreakdown as any)[s._id] = s.count;
+      }
+    });
+
+    const subjectBreakdown = subjectBreakdownRaw.map((s: any) => ({
+      subject: s._id,
+      count: s.count
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        totalAssignments,
+        totalPapers,
+        assignmentsThisWeek,
+        totalSubjects: allSubjects.length,
+        recentAssignments,
+        statusBreakdown,
+        subjectBreakdown
+      }
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+};
+
+

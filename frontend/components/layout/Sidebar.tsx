@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <Link 
-          href="/assignments/create"
+          href="/create"
           className="mt-6 w-full h-12 bg-[#1A1A1A] border-[3px] border-[#E8572A] rounded-full flex items-center justify-center gap-2 text-[#FFFFFF] text-[15px] font-semibold hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-md shadow-black/10 cursor-pointer"
         >
           <Sparkles size={16} className="text-white fill-white/10" />
@@ -67,7 +67,10 @@ const Sidebar: React.FC = () => {
 
         <nav className="mt-8 flex flex-col gap-1.5">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href === '/assignments' && pathname === '/');
+            const isActive =
+              pathname === item.href ||
+              (item.href === '/home' && pathname === '/') ||
+              (item.href === '/assignments' && (pathname.startsWith('/loading') || pathname.startsWith('/paper')));
             const Icon = item.icon;
 
             return (

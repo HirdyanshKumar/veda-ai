@@ -56,3 +56,19 @@ export interface NavItem {
   href: string;
   active?: boolean;
 }
+
+export interface IDashboardStats {
+  totalAssignments: number;
+  totalPapers: number;
+  assignmentsThisWeek: number;
+  totalSubjects: number;
+  recentAssignments: IAssignment[];
+  statusBreakdown: {
+    pending: number;
+    processing: number;
+    completed: number;
+    failed: number;
+  };
+  subjectBreakdown: Array<{ subject: string; count: number }>;
+}
+
