@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import assignmentRouter from './routes/assignment.routes';
+import paperRouter from './routes/paper.routes';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/assignments', assignmentRouter);
+app.use('/api/papers', paperRouter);
 
 app.use((req, res) => {
   res.status(404).json({

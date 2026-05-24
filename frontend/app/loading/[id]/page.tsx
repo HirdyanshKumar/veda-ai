@@ -56,7 +56,7 @@ export default function LoadingPage() {
         if (assignment.status === 'completed') {
           setCurrentStage(4);
           setIsNavigating(true);
-          router.push(`/assignments/${id}`);
+          router.push(`/paper/${id}`);
           return;
         }
 
@@ -103,7 +103,7 @@ export default function LoadingPage() {
       }, 1400);
 
       const t3 = setTimeout(() => {
-        router.push(`/assignments/${id}`);
+        router.push(`/paper/${id}`);
       }, 1800);
 
       timeoutsRef.current.push(t1, t2, t3);
@@ -134,7 +134,7 @@ export default function LoadingPage() {
           }, 1400);
 
           const t3 = setTimeout(() => {
-            router.push(`/assignments/${id}`);
+            router.push(`/paper/${id}`);
           }, 1800);
 
           timeoutsRef.current.push(t1, t2, t3);

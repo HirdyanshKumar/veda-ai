@@ -19,7 +19,11 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) =>
   const isMenuOpen = openMenuId === assignment._id;
 
   const handleCardClick = () => {
-    router.push(`/assignments/${assignment._id}`);
+    if (assignment.status === 'completed') {
+      router.push(`/paper/${assignment._id}`);
+    } else if (assignment.status === 'processing') {
+      router.push(`/loading/${assignment._id}`);
+    }
   };
 
   const getStatusBadge = (status: IAssignment['status']) => {
@@ -104,15 +108,28 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) =>
               <>
                 <div className="fixed inset-0 z-40 bg-transparent" onClick={clearMenu} />
                 <div className="absolute right-0 top-full mt-1 bg-white rounded-[12px] p-2 shadow-[0px_8px_24px_rgba(0,0,0,0.12)] min-w-[170px] z-50 border border-neutral-100/80 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <button 
-                    onClick={() => {
-                      clearMenu();
-                      router.push(`/assignments/${assignment._id}`);
-                    }}
-                    className="w-full text-left font-medium text-sm text-[#1A1A1A] px-4 py-2.5 hover:bg-[#F9FAFB] rounded-[8px] transition-colors whitespace-nowrap"
-                  >
-                    View Assignment
-                  </button>
+                  {assignment.status === 'completed' && (
+                    <button 
+                      onClick={() => {
+                        clearMenu();
+                        router.push(`/paper/${assignment._id}`);
+                      }}
+                      className="w-full text-left font-medium text-sm text-[#1A1A1A] px-4 py-2.5 hover:bg-[#F9FAFB] rounded-[8px] transition-colors whitespace-nowrap"
+                    >
+                      View Paper
+                    </button>
+                  )}
+                  {assignment.status === 'processing' && (
+                    <button 
+                      onClick={() => {
+                        clearMenu();
+                        router.push(`/loading/${assignment._id}`);
+                      }}
+                      className="w-full text-left font-medium text-sm text-[#1A1A1A] px-4 py-2.5 hover:bg-[#F9FAFB] rounded-[8px] transition-colors whitespace-nowrap"
+                    >
+                      View Progress
+                    </button>
+                  )}
                   <button 
                     onClick={() => {
                       clearMenu();

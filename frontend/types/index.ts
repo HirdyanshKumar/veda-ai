@@ -12,6 +12,7 @@ export interface ISection {
 }
 
 export interface IGeneratedPaper {
+  _id: string;
   assignmentId: string;
   sections: ISection[];
 }
@@ -40,11 +41,9 @@ export interface IQuestionTypeRow {
 }
 
 export interface ICreateFormData {
-  // Step 1
   title: string;
   subject: string;
   difficulty: "easy" | "medium" | "hard";
-  // Step 2
   dueDate: string;
   questionTypeRows: IQuestionTypeRow[];
   additionalInstructions: string;

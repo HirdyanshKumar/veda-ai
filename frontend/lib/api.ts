@@ -148,6 +148,92 @@ export const api = {
     } catch (err: any) {
       throw new Error(err.message || "Failed to regenerate assignment");
     }
+  },
+
+  updateQuestion: async (
+    paperId: string,
+    sectionIndex: number,
+    questionIndex: number,
+    updates: any,
+    token?: string
+  ): Promise<IGeneratedPaper> => {
+    try {
+      const response = await fetch(`${BASE_URL}/papers/${paperId}/question`, {
+        method: 'PATCH',
+        headers: getHeaders(token),
+        body: JSON.stringify({ sectionIndex, questionIndex, updates }),
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to update question");
+    }
+  },
+
+  addQuestion: async (
+    paperId: string,
+    sectionIndex: number,
+    question: any,
+    token?: string
+  ): Promise<IGeneratedPaper> => {
+    try {
+      const response = await fetch(`${BASE_URL}/papers/${paperId}/question`, {
+        method: 'POST',
+        headers: getHeaders(token),
+        body: JSON.stringify({ sectionIndex, question }),
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to add question");
+    }
+  },
+
+  deleteQuestion: async (
+    paperId: string,
+    sectionIndex: number,
+    questionIndex: number,
+    token?: string
+  ): Promise<IGeneratedPaper> => {
+    try {
+      const response = await fetch(`${BASE_URL}/papers/${paperId}/question`, {
+        method: 'DELETE',
+        headers: getHeaders(token),
+        body: JSON.stringify({ sectionIndex, questionIndex }),
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to delete question");
+    }
+  },
+
+  downloadPDF: async (id: string, token?: string): Promise<Blob> => {
+    try {
+      const response = await fetch(`${BASE_URL}/assignments/${id}/pdf`, {
+        method: 'GET',
+        headers: getHeaders(token),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to download PDF");
+      }
+      return await response.blob();
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to download PDF");
+    }
+  },
+
+  regeneratePaper: async (id: string, token?: string): Promise<IAssignment> => {
+    try {
+      const response = await fetch(`${BASE_URL}/assignments/${id}/regenerate`, {
+        method: 'POST',
+        headers: getHeaders(token),
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to regenerate paper");
+    }
   }
 };
 export default api;

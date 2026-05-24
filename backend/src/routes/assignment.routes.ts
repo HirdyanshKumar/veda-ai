@@ -5,7 +5,8 @@ import {
   getAssignment, 
   getGeneratedPaper,
   deleteAssignment,
-  regenerateAssignment
+  regenerateAssignment,
+  downloadPDF
 } from '../controllers/assignment.controller';
 import { verifyAuth } from '../middleware/auth.middleware';
 
@@ -18,6 +19,7 @@ router.post('/:id/regenerate', regenerateAssignment);
 router.get('/', getAssignments);
 router.get('/:id', getAssignment);
 router.get('/:id/paper', getGeneratedPaper);
+router.get('/:id/pdf', downloadPDF);
 router.delete('/:id', deleteAssignment);
 
 export default router;
