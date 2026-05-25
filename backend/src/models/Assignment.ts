@@ -11,6 +11,7 @@ export interface IAssignmentDoc extends Document {
   difficulty: 'easy' | 'medium' | 'hard';
   additionalInstructions?: string;
   fileUrl?: string;
+  classId?: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   createdAt: Date;
   updatedAt: Date;
@@ -79,6 +80,10 @@ const AssignmentSchema = new Schema<IAssignmentDoc>(
       type: String,
       required: [true, 'User ID is required'],
       index: true
+    },
+    classId: {
+      type: String,
+      required: false
     }
   },
   {

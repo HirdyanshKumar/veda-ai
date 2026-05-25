@@ -1,4 +1,4 @@
-import { IAssignment, IGeneratedPaper, ICreateFormData, IDashboardStats } from '../types';
+import { IAssignment, IGeneratedPaper, ICreateFormData, IDashboardStats, IClass, ICreateClassInput } from '../types';
 
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
@@ -78,7 +78,8 @@ export const api = {
         fileUrl: payload.fileUrl,
         numberOfQuestions,
         totalMarks,
-        questionTypes
+        questionTypes,
+        classId: payload.classId
       };
 
       const response = await fetch(`${BASE_URL}/assignments`, {
@@ -287,6 +288,73 @@ export const api = {
       return data.data;
     } catch (err: any) {
       throw new Error(err.message || "Failed to fetch library assignments");
+    }
+  },
+
+  getClasses: async (token?: string): Promise<IClass[]> => {
+    try {
+      const response = await fetch(`${BASE_URL}/classes`, {
+        method: 'GET',
+        headers: getHeaders(token),
+        cache: 'no-store'
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to fetch classes");
+    }
+  },
+
+  createClass: async (payload: ICreateClassInput, token?: string): Promise<IClass> => {
+    try {
+      const response = await fetch(`${BASE_URL}/classes`, {
+        method: 'POST',
+        headers: getHeaders(token),
+        body: JSON.stringify(payload)
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to create class");
+    }
+  },
+
+  updateClass: async (id: string, payload: Partial<ICreateClassInput>, token?: string): Promise<IClass> => {
+    try {
+      const response = await fetch(`${BASE_URL}/classes/${id}`, {
+        method: 'PATCH',
+        headers: getHeaders(token),
+        body: JSON.stringify(payload)
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to update class");
+    }
+  },
+
+  deleteClass: async (id: string, token?: string): Promise<void> => {
+    try {
+      const response = await fetch(`${BASE_URL}/classes/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders(token)
+      });
+      await handleResponse(response);
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to delete class");
+    }
+  },
+
+  regenerateJoinCode: async (id: string, token?: string): Promise<IClass> => {
+    try {
+      const response = await fetch(`${BASE_URL}/classes/${id}/regenerate-code`, {
+        method: 'PATCH',
+        headers: getHeaders(token)
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to regenerate class join code");
     }
   }
 };

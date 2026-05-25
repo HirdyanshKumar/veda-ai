@@ -48,6 +48,7 @@ export interface ICreateFormData {
   questionTypeRows: IQuestionTypeRow[];
   additionalInstructions: string;
   fileUrl?: string;
+  classId?: string;
 }
 
 export interface NavItem {
@@ -70,5 +71,23 @@ export interface IDashboardStats {
     failed: number;
   };
   subjectBreakdown: Array<{ subject: string; count: number }>;
+}
+
+export interface IClass {
+  _id: string;
+  teacherId: string;
+  name: string;
+  subject: string;
+  grade: string;
+  joinCode: string;
+  studentCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICreateClassInput {
+  name: string;
+  subject: string;
+  grade: string;
 }
 

@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import assignmentRouter from './routes/assignment.routes';
 import paperRouter from './routes/paper.routes';
 import userRouter from './routes/user.routes';
+import classRouter from './routes/class.routes';
 
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => {
 app.use('/api/assignments', assignmentRouter);
 app.use('/api/papers', paperRouter);
 app.use('/api/user', userRouter);
+app.use('/api/classes', classRouter);
 
 
 app.use((req, res) => {

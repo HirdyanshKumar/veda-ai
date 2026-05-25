@@ -52,6 +52,7 @@ export const createAssignment = async (req: Request, res: Response): Promise<voi
       difficulty: validatedData.difficulty,
       additionalInstructions: validatedData.additionalInstructions,
       fileUrl: validatedData.fileUrl,
+      classId: validatedData.classId,
       status: 'pending'
     });
 

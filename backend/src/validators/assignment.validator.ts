@@ -9,7 +9,8 @@ export const assignmentInputSchema = z.object({
   totalMarks: z.number().int().positive("Total marks must be positive"),
   difficulty: z.enum(["easy", "medium", "hard"]),
   additionalInstructions: z.string().max(500, "Instructions cannot exceed 500 characters").optional(),
-  fileUrl: z.string().optional()
+  fileUrl: z.string().optional(),
+  classId: z.string().optional()
 });
 
 const questionSchema = z.object({

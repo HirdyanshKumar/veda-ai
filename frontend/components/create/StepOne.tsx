@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAssignmentStore } from '../../store/assignmentStore';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import { DIFFICULTY_OPTIONS } from '../../constants/questionTypes';
+import { useAuth } from '@clerk/nextjs';
+import api from '../../lib/api';
+import { IClass } from '../../types';
 
 interface StepOneProps {
   goNext: () => void;
@@ -10,6 +13,26 @@ interface StepOneProps {
 
 export const StepOne: React.FC<StepOneProps> = ({ goNext, validationErrors }) => {
   const { formData, updateFormData } = useAssignmentStore();
+  const { getToken } = useAuth();
+  const [classes, setClasses] = useState<IClass[]>([]);
+  const [loadingClasses, setLoadingClasses] = useState(true);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const token = await getToken();
+        if (token) {
+          const res = await api.getClasses(token);
+          setClasses(res);
+        }
+      } catch (err) {
+        // Ignored
+      } finally {
+        setLoadingClasses(false);
+      }
+    };
+    fetchClasses();
+  }, [getToken]);
 
   return (
     <div className="w-full max-w-[810px] mx-auto px-4 md:px-0 mb-[160px] md:mb-[100px]">
@@ -69,6 +92,52 @@ export const StepOne: React.FC<StepOneProps> = ({ goNext, validationErrors }) =>
             <span className="text-[#EF4444] text-[12px] font-medium pl-3">
               {validationErrors.subject}
             </span>
+          )}
+        </div>
+
+        {/* Class Selection Field */}
+        <div className="w-full flex flex-col gap-2">
+          <label 
+            className="text-[16px] font-bold text-[#303030]"
+            style={{ fontFamily: "'Bricolage Grotesque', sans-serif", letterSpacing: '-0.04em' }}
+          >
+            Class
+          </label>
+          {!loadingClasses && classes.length === 0 ? (
+            <div className="w-full bg-[#FFF7ED] border border-[#FED7AA] rounded-[16px] p-4 flex items-start gap-3">
+              <BookOpen size={18} className="text-[#E8572A] mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-[#6B7280] leading-normal">
+                No classes yet.{' '}
+                <a
+                  href="/classes"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-[#E8572A] hover:underline"
+                >
+                  Create a class
+                </a>{' '}
+                to assign this paper to students.
+              </span>
+            </div>
+          ) : (
+            <div className="relative w-full">
+              <select
+                value={formData.classId || ''}
+                onChange={(e) => updateFormData({ classId: e.target.value || undefined })}
+                className="w-full h-11 px-4 pr-10 border border-[#DADADA] rounded-full bg-white text-base font-medium text-[#303030] appearance-none focus:outline-none focus:border-neutral-400 transition-colors shadow-sm cursor-pointer"
+                disabled={loadingClasses}
+              >
+                <option value="">Do not assign to class</option>
+                {classes.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name} — {c.subject} (Grade {c.grade})
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">
+                ▼
+              </div>
+            </div>
           )}
         </div>
 

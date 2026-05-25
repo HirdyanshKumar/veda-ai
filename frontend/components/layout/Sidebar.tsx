@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAssignmentStore } from '@/store/assignmentStore';
 import { useUser, useAuth } from '@clerk/nextjs';
+import api from '@/lib/api';
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ const Sidebar: React.FC = () => {
   const fetchAssignments = useAssignmentStore((state) => state.fetchAssignments);
   const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
+  const [classesCount, setClassesCount] = React.useState(0);
 
   React.useEffect(() => {
     const syncAssignments = async () => {
@@ -30,12 +32,28 @@ const Sidebar: React.FC = () => {
     syncAssignments();
   }, [fetchAssignments, getToken]);
 
+  React.useEffect(() => {
+    const syncClasses = async () => {
+      try {
+        const token = await getToken();
+        if (token) {
+          const res = await api.getClasses(token);
+          setClassesCount(res.length);
+        }
+      } catch (err) {
+        // Ignored
+      }
+    };
+    syncClasses();
+  }, [getToken, assignments]);
+
   const completedCount = assignments.filter(a => a.status === 'completed').length;
 
   const navItems = [
     { label: 'Home', icon: LayoutGrid, href: '/home' },
     { label: 'My Groups', icon: Users, href: '/groups' },
     { label: 'Assignments', icon: FileText, href: '/assignments', badge: assignments.length > 0 ? assignments.length : undefined },
+    { label: 'Classes', icon: Users, href: '/classes', badge: classesCount > 0 ? classesCount : undefined },
     { label: "AI Teacher's Toolkit", icon: Smartphone, href: '/toolkit' },
     { label: 'My Library', icon: BookOpen, href: '/library', badge: completedCount > 0 ? completedCount : undefined },
   ];
@@ -73,7 +91,8 @@ const Sidebar: React.FC = () => {
               pathname === item.href ||
               (item.href === '/home' && pathname === '/') ||
               (item.href === '/assignments' && (pathname.startsWith('/loading') || pathname.startsWith('/paper'))) ||
-              (item.href === '/library' && pathname.startsWith('/library'));
+              (item.href === '/library' && pathname.startsWith('/library')) ||
+              (item.href === '/classes' && pathname.startsWith('/classes'));
             const Icon = item.icon;
 
             return (
