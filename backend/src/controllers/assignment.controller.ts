@@ -88,7 +88,34 @@ export const createAssignment = async (req: Request, res: Response): Promise<voi
 
 export const getAssignments = async (req: Request, res: Response): Promise<void> => {
   try {
-    const assignments = await Assignment.find({ userId: req.userId }).sort({ createdAt: -1 });
+    const { status, subject, search, sortBy, limit } = req.query;
+    const query: any = { userId: req.userId };
+
+    if (status) {
+      query.status = status;
+    }
+    if (subject) {
+      query.subject = { $regex: String(subject), $options: 'i' };
+    }
+    if (search) {
+      query.title = { $regex: String(search), $options: 'i' };
+    }
+
+    const sortMap: Record<string, any> = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+      title_asc: { title: 1 },
+      title_desc: { title: -1 }
+    };
+    const sort = sortMap[String(sortBy)] || { createdAt: -1 };
+
+    const limitNum = limit ? parseInt(String(limit), 10) : 0;
+    
+    const assignments = await Assignment.find(query)
+      .sort(sort)
+      .limit(limitNum)
+      .lean();
+
     res.status(200).json({
       success: true,
       data: assignments

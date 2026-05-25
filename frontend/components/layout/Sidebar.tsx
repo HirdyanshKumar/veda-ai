@@ -8,7 +8,7 @@ import {
   Users, 
   FileText, 
   Smartphone, 
-  Clock, 
+  BookOpen, 
   Settings,
   Sparkles 
 } from 'lucide-react';
@@ -30,12 +30,14 @@ const Sidebar: React.FC = () => {
     syncAssignments();
   }, [fetchAssignments, getToken]);
 
+  const completedCount = assignments.filter(a => a.status === 'completed').length;
+
   const navItems = [
     { label: 'Home', icon: LayoutGrid, href: '/home' },
     { label: 'My Groups', icon: Users, href: '/groups' },
     { label: 'Assignments', icon: FileText, href: '/assignments', badge: assignments.length > 0 ? assignments.length : undefined },
     { label: "AI Teacher's Toolkit", icon: Smartphone, href: '/toolkit' },
-    { label: 'My Library', icon: Clock, href: '/library' },
+    { label: 'My Library', icon: BookOpen, href: '/library', badge: completedCount > 0 ? completedCount : undefined },
   ];
 
   return (
@@ -70,7 +72,8 @@ const Sidebar: React.FC = () => {
             const isActive =
               pathname === item.href ||
               (item.href === '/home' && pathname === '/') ||
-              (item.href === '/assignments' && (pathname.startsWith('/loading') || pathname.startsWith('/paper')));
+              (item.href === '/assignments' && (pathname.startsWith('/loading') || pathname.startsWith('/paper'))) ||
+              (item.href === '/library' && pathname.startsWith('/library'));
             const Icon = item.icon;
 
             return (

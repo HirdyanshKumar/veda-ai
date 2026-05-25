@@ -265,6 +265,29 @@ export const api = {
     } catch (err: any) {
       throw new Error(err.message || "Failed to complete onboarding");
     }
+  },
+
+  getLibrary: async (
+    params: { status?: string; subject?: string; search?: string; sortBy?: string },
+    token?: string
+  ): Promise<IAssignment[]> => {
+    try {
+      const query = new URLSearchParams();
+      if (params.status) query.append('status', params.status);
+      if (params.subject) query.append('subject', params.subject);
+      if (params.search) query.append('search', params.search);
+      if (params.sortBy) query.append('sortBy', params.sortBy);
+      
+      const response = await fetch(`${BASE_URL}/assignments?${query.toString()}`, {
+        method: 'GET',
+        headers: getHeaders(token),
+        cache: 'no-store'
+      });
+      const data = await handleResponse(response);
+      return data.data;
+    } catch (err: any) {
+      throw new Error(err.message || "Failed to fetch library assignments");
+    }
   }
 };
 export default api;
