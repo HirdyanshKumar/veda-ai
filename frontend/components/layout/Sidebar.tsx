@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <Link 
-          href="/create"
+          href="/assignments/create"
           className="mt-6 w-full h-12 bg-[#1A1A1A] border-[3px] border-[#E8572A] rounded-full flex items-center justify-center gap-2 text-[#FFFFFF] text-[15px] font-semibold hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-md shadow-black/10 cursor-pointer"
         >
           <Sparkles size={16} className="text-white fill-white/10" />

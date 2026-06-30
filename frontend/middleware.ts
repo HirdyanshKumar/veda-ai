@@ -7,39 +7,22 @@ const isPublicRoute = createRouteMatcher([
   "/api/health"
 ]);
 
-const isOnboardingRoute = createRouteMatcher(["/onboarding(.*)"]);
-
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, sessionClaims } = await auth();
-
+  // Allow public routes without any auth check
   if (isPublicRoute(req)) {
     return NextResponse.next();
   }
 
-  if (isOnboardingRoute(req)) {
-    if (!userId) {
-      const signInUrl = new URL("/sign-in", req.url);
-      return NextResponse.redirect(signInUrl);
-    }
-    const isOnboarded = (sessionClaims?.metadata as any)?.onboarded;
-    if (isOnboarded === true) {
-      const homeUrl = new URL("/home", req.url);
-      return NextResponse.redirect(homeUrl);
-    }
-    return NextResponse.next();
-  }
-
+  // All other routes: require authentication
+  const { userId } = await auth();
   if (!userId) {
     const signInUrl = new URL("/sign-in", req.url);
     return NextResponse.redirect(signInUrl);
   }
 
-  const isOnboarded = (sessionClaims?.metadata as any)?.onboarded;
-  if (!isOnboarded) {
-    const onboardingUrl = new URL("/onboarding", req.url);
-    return NextResponse.redirect(onboardingUrl);
-  }
-
+  // Onboarding enforcement is handled client-side in the app layout/pages
+  // to avoid stale JWT sessionClaims issues (publicMetadata is not in the
+  // default Clerk session token without a custom JWT template in the dashboard)
   return NextResponse.next();
 });
 
@@ -49,3 +32,4 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
+

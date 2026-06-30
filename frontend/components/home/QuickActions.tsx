@@ -92,7 +92,7 @@ const QuickActions: React.FC<QuickActionsProps> = ({ stats }) => {
         icon={<Plus size={22} color="#FFFFFF" />}
         title="Create Assignment"
         subtitle="Generate a new question paper"
-        onClick={() => router.push('/create')}
+        onClick={() => router.push('/assignments/create')}
         prominent
       />
       <ActionCard

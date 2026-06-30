@@ -7,7 +7,7 @@ import BottomNav from './BottomNav';
 import { Plus } from 'lucide-react';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { useAssignmentStore } from '@/store/assignmentStore';
 
 interface MainLayoutProps {
@@ -18,16 +18,26 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
   const resetStore = useAssignmentStore((state) => state.resetStore);
   
   const isOutputPage = pathname?.startsWith('/assignments/') && pathname !== '/assignments/create' && pathname !== '/assignments';
 
   React.useEffect(() => {
-    if (isLoaded && !isSignedIn) {
+    if (!isLoaded) return;
+    if (!isSignedIn) {
       resetStore();
       router.push('/sign-in');
+      return;
     }
-  }, [isLoaded, isSignedIn, resetStore, router]);
+    // Enforce onboarding client-side (middleware can't do this reliably
+    // because publicMetadata isn't in the default Clerk JWT session token)
+    const isOnboarded = (user?.publicMetadata as any)?.onboarded === true;
+    if (!isOnboarded) {
+      router.replace('/onboarding');
+    }
+  }, [isLoaded, isSignedIn, user, resetStore, router]);
+
 
   const handleCreateAssignment = () => {
     router.push('/assignments/create');

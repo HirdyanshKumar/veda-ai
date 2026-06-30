@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useUser, useAuth } from '@clerk/nextjs';
+import { useUser, useAuth, useSession } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { Loader2, AlertCircle, ChevronLeft, CheckCircle2 } from 'lucide-react';
 import { api } from '../../lib/api';
@@ -91,6 +91,7 @@ const ErrorText: React.FC<{ message: string }> = ({ message }) => (
 export default function OnboardingPage() {
   const { user, isLoaded } = useUser();
   const { getToken } = useAuth();
+  const { session } = useSession();
   const router = useRouter();
 
   const [currentStep, setCurrentStep] = useState<Step>(1);
@@ -104,10 +105,11 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     if (!isLoaded) return;
+    if (isSuccess) return; // Don't redirect mid-success flow
     if ((user?.publicMetadata as any)?.onboarded === true) {
-      router.replace('/home');
+      window.location.href = '/home';
     }
-  }, [isLoaded, user, router]);
+  }, [isLoaded, user, router, isSuccess]);
 
   const goToStep2 = () => {
     if (!selectedRole) {
@@ -127,16 +129,21 @@ export default function OnboardingPage() {
         { role: selectedRole!, school, location, subject },
         token || undefined
       );
+      // Reload both user object and session JWT so middleware sees onboarded: true
       await user?.reload();
+      await session?.reload();
       setIsSuccess(true);
+      // Use full page navigation (not router.replace) so the browser sends
+      // the updated Clerk session token and middleware passes the onboarded check
       setTimeout(() => {
-        router.replace('/home');
+        window.location.href = '/home';
       }, 900);
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.');
       setIsSubmitting(false);
     }
   };
+
 
   if (!isLoaded) {
     return (

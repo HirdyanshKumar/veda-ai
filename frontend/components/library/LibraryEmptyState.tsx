@@ -29,7 +29,7 @@ const LibraryEmptyState: React.FC = () => {
       </div>
 
       <button
-        onClick={() => router.push('/create')}
+        onClick={() => router.push('/assignments/create')}
         className="h-12 px-8 bg-[#1A1A1A] border-[3px] border-[#E8572A] rounded-full flex items-center justify-center text-[#FFFFFF] text-[15px] font-semibold hover:bg-neutral-800 transition-all active:scale-[0.98] cursor-pointer"
       >
         ✦ Create Your First Assignment

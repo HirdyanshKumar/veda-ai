@@ -117,7 +117,7 @@ const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ user, stats }) => {
         </div>
 
         <button
-          onClick={() => router.push('/create')}
+          onClick={() => router.push('/assignments/create')}
           style={{
             marginTop: '24px',
             background: '#E8572A',

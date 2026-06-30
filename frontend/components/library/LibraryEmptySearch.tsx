@@ -45,7 +45,7 @@ const LibraryEmptySearch: React.FC<LibraryEmptySearchProps> = ({ query, subject,
           Clear Filters
         </button>
         <button
-          onClick={() => router.push('/create')}
+          onClick={() => router.push('/assignments/create')}
           className="h-10 px-6 border border-[#E5E7EB] bg-white text-[#303030] rounded-full text-sm font-medium hover:bg-neutral-50 transition-all active:scale-[0.98]"
         >
           Create New Paper

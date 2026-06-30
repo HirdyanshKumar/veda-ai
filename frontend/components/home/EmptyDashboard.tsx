@@ -146,7 +146,7 @@ const EmptyDashboard: React.FC = () => {
       </div>
 
       <button
-        onClick={() => router.push('/create')}
+        onClick={() => router.push('/assignments/create')}
         style={{
           background: '#1A1A1A',
           color: '#FFFFFF',
