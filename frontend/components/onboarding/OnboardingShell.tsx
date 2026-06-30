@@ -60,16 +60,13 @@ const OnboardingShell: React.FC<OnboardingShellProps> = ({ children }) => {
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M3 4C3 3.44772 3.44772 3 4 3H9.5C9.9122 3 10.2763 3.25248 10.4226 3.6393L12 7.82088L13.5774 3.6393C13.7237 3.25248 14.0878 3 14.5 3H20C20.5523 3 21 3.44772 21 4C21 4.22383 20.925 4.44062 20.7874 4.61718L13.7874 19.6172C13.4831 20.1979 12.8767 20.5524 12.2126 20.5524H11.7874C11.1233 20.5524 10.5169 20.1979 10.2126 19.6172L3.2126 4.61718C3.07502 4.44062 3 4.22383 3 4Z"
-                fill="white"
-              />
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
           <span style={{ fontSize: '22px', fontWeight: 700, color: '#1A1A1A', letterSpacing: '-0.03em' }}>
-            VedaAI
+            QuestAI
           </span>
         </div>
       </div>

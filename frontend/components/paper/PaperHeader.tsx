@@ -24,7 +24,7 @@ const PaperHeader: React.FC<PaperHeaderProps> = ({ assignment }) => {
   return (
     <div className="text-center border-b border-gray-200 pb-6 mb-6">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gray-400 mb-1">
-        Veda AI · Question Paper
+        QuestAI · Question Paper
       </p>
       {schoolLine && (
         <p className="text-sm font-semibold text-gray-600 mb-1">{schoolLine}</p>

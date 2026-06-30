@@ -39,7 +39,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         <div className="bg-white rounded-3xl p-10 max-w-[320px] w-full text-center flex flex-col items-center gap-4 shadow-xl border border-neutral-100 animate-in fade-in zoom-in-95 duration-200">
           <div className="w-12 h-12 rounded-full border-4 border-neutral-100 border-t-[#FF5623] animate-spin" />
           <h3 className="text-[18px] font-bold text-[#303030]" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
-            Loading VedaAI...
+            Loading QuestAI...
           </h3>
         </div>
       </div>

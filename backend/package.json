@@ -1,7 +1,7 @@
 {
-  "name": "veda-ai-backend",
+  "name": "quest-ai-backend",
   "version": "1.0.0",
-  "description": "BullMQ and Gemini-powered question paper generator backend for VedaAI",
+  "description": "BullMQ and Gemini-powered question paper generator backend for QuestAI",
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon",

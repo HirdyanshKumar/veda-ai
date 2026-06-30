@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'VedaAI - AI Assessment Creator',
+  title: 'QuestAI - AI Assessment Creator',
   description: 'Create and grade student assignments efficiently using the power of AI grading systems.',
 };
 

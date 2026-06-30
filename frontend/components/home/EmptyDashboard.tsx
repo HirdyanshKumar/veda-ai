@@ -98,7 +98,7 @@ const EmptyDashboard: React.FC = () => {
             marginBottom: '8px',
           }}
         >
-          Welcome to VedaAI!
+          Welcome to QuestAI!
         </div>
         <div style={{ fontSize: '16px', color: '#6B7280', lineHeight: 1.6 }}>
           Create your first AI-powered question paper in minutes. No more manual paper setting.

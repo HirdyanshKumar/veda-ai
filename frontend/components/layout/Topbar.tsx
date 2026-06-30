@@ -20,20 +20,12 @@ const Topbar: React.FC = () => {
         <div className="select-none flex items-center justify-center shadow-md shadow-black/5 rounded-[10px] overflow-hidden">
           <svg width="42" height="42" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="28" height="28" rx="7" fill="#303030"/>
-            <path fillRule="evenodd" clipRule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="white"/>
-            <path opacity="0.2" fillRule="evenodd" clipRule="evenodd" d="M15.9089 19.8507C15.9089 19.8507 16.4181 21.2101 16.8848 21.2952H10.9878C9.79981 21.2952 8.73946 20.6155 8.39977 19.3409L4.96347 9.14449C4.96347 9.14449 4.66663 7.9124 4.19995 7.70001H10.2243C11.4122 7.74255 12.2183 8.16732 12.685 9.73942L15.9089 19.8507Z" fill="url(#paint0_linear_19_382)"/>
-            <path fillRule="evenodd" clipRule="evenodd" d="M12.1335 19.8509C12.1335 19.8509 11.6243 21.2103 11.1576 21.2954H17.0546C18.2426 21.2954 19.3029 20.6157 19.6426 19.3411L23.0367 9.14497C23.0367 9.14497 23.3335 7.91289 23.8002 7.7005H17.8181C16.6301 7.7005 15.8666 8.12527 15.3999 9.69737L12.1335 19.8509Z" fill="white"/>
-            <defs>
-              <linearGradient id="paint0_linear_19_382" x1="10.5424" y1="6.54428" x2="10.5424" y2="22.4936" gradientUnits="userSpaceOnUse">
-                <stop stopColor="white" stopOpacity="0"/>
-                <stop offset="0.33" stopColor="white" stopOpacity="0"/>
-                <stop offset="0.76" stopColor="#0E1513"/>
-                <stop offset="1" stopColor="#0E1513"/>
-              </linearGradient>
-            </defs>
+            <path d="M14 6L6 10L14 14L22 10L14 6Z" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M6 18L14 22L22 18" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M6 14L14 18L22 14" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <span className="text-[22px] font-bold text-[#1A1A1A] tracking-tight font-sans">VedaAI</span>
+        <span className="text-[22px] font-bold text-[#1A1A1A] tracking-tight font-sans">QuestAI</span>
       </div>
  
       <div className="flex md:hidden items-center gap-3">

@@ -156,7 +156,7 @@ export default function OnboardingPage() {
           <StepHeader
             step="01"
             title="What's your role?"
-            subtitle="This helps us personalize your VedaAI experience"
+            subtitle="This helps us personalize your QuestAI experience"
           />
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

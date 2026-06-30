@@ -1,4 +1,4 @@
-<h1 align="center">Veda AI</h1>
+<h1 align="center">QuestAI</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-Frontend-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" />
@@ -16,8 +16,8 @@
 
 ---
 
-Veda AI is a premium, state-of-the-art AI-powered assignment workspace built for teachers to generate and organize exam sheets in seconds.
-By entering simple topics or instructions, teachers can instantly draft complete multi-section test papers matching CBSE/state levels with structured schemas. 
+QuestAI is a premium, state-of-the-art AI-powered assignment workspace built for teachers to generate and organize exam sheets in seconds.
+By entering simple topics or instructions, teachers can instantly draft complete multi-section test papers with structured schemas. 
 
 The system leverages standard Next.js App Router layout components on the frontend, Express and Socket.io on the backend, Upstash Redis and BullMQ queues for asynchronously running generators, and the Google Gemini API for high-fidelity structures.
 
